@@ -51,7 +51,8 @@
   function copytext(){
     var ciphertext=document.getElementById("cipherurl");
     ciphertext.select();
-    navigator.clipboard.writeText(ciphertext.value);
+    document.execCommand("copy");
+    // navigator.clipboard.writeText(ciphertext.value);
   }
   function shortUrl(event){
       event.preventDefault();
