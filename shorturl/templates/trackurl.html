@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block title %}My URLs{% endblock %}
+
+{% block main %}
+
+<div class="container d-md-flex justify-content-center  mt-5 ">
+    <div class="col-md-8 border border-primary rounded p-3 bg-light text-primary">
+        <h1 class="text-dark">Total URL Clicks</h1>
+        {% block content %}
+        <form action="" onsubmit="trackview(event)">
+            {% csrf_token %}
+            
+            <div>
+                <p class="text-dark">The number of clicks from the shortened URL that redirected the user to the destination page.</p>
+            </div>
+            <div class="form-row  d-md-flex">
+                <input type="text" id="shorturl" placeholder="Enter the link here" class="form-control mt-2" name="plainurl"  required value={{cipherurl}}> 
+                <div class="text-center">
+                    <input type="submit" value="Track Clicks" class="btn btn-primary text-light text-center mt-2">
+                </div>
+            </div>
+
+
+            <div class="d-flex mt-3 text-dark">
+                <h3>Views:</h3>
+                {% if views %}
+                <h3 class="" id="views">{{views}}</h3>
+                {% else %}
+                <h3 class="" id="views">0</h3>
+                {% endif %}
+            </div>
+
+        </form>
+        {% endblock %}
+    </div>
+</div>
+
+<script>
+
+function trackview(event){
+      event.preventDefault();
+      var shorturl=document.getElementById('shorturl').value;
+      dataToSend={
+        shorturl:shorturl
+      }
+      fetch('/getviews/', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(dataToSend)
+          })
+          .then(response => {
+              if (response.ok) {            
+                      return response.json();
+                  }
+                  throw new Error('Network response was not ok.');
+          })  
+          .then(data => {
+            console.log(data);
+            let views=data.views;
+            document.getElementById("views").innerHTML=views;
+            //   let shortlink=data.shorturl;
+            //   let originalurl=data.plainurl;
+            //   if(shortlink!=""){
+            //     window.location.href=shortlink;
+            //   }
+          })
+          .catch(error => {
+              console.error('Error:', error);
+          });
+      }
+</script>
+
+
+{% endblock %}

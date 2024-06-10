@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}My URLs{% endblock %}
+
+{% block main %}
+
+
+<div style="overflow-x: auto;">
+    <table>
+      <tr>
+        <th>No.</th>
+        <th>Short Url</th>
+        <th>Url</th>
+        <th>Views</th>
+        <th>#</th>
+      </tr>
+
+      {% for mylink in myUrl %}
+      <tr>
+          <th scope="row">{{forloop.counter}}</th>
+          <td>{{mylink.cipher_url}}</td>
+          <td>{{mylink.plain_url}}</td>
+          <td>{{mylink.views}}</td>
+          <td><a href="{% url 'displayurl' short_url=mylink.cipher_url %}">View</a></td>
+      </tr>
+      {% endfor %}
+
+      
+    </table>
+  </div>
+  
+
+{% endblock %}
